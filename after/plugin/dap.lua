@@ -1,4 +1,7 @@
 local dap = require('dap')
+local widgets = require('dap.ui.widgets')
+
+
 
 dap.configurations.go = {
     {
@@ -18,29 +21,37 @@ dap.adapters.go = {
     },
 }
 
+vim.fn.sign_define('DapBreakpoint', { text = "🪅", texthl = "", linehl = "", numhl = "" })
+vim.fn.sign_define('DapStopped', { text = "👀", texthl = "", linehl = "", numhl = "" })
+
+-- open inspect a variable
+vim.keymap.set({ "n", "v" }, "<leader>dh", function()
+    widgets.hover()
+end)
+
 -- begin debug session
 vim.keymap.set("n", "<leader>sb", function()
     dap.continue({ new = true })
-    dap.repl.toggle()
+    -- dap.repl.toggle()
 end)
 
 -- end debug session
 vim.keymap.set("n", "<leader>se", function()
     dap.close()
-    dap.repl.toggle()
+    -- dap.repl.toggle()
 end)
 
 -- continue session
-vim.keymap.set("n", "<leader>sc", function() dap.continue() end)
+vim.keymap.set("n", "<F5>", function() dap.continue() end)
 
 -- step over
-vim.keymap.set("n", "<leader>so", function() dap.step_over() end)
-
--- step out
-vim.keymap.set("n", "<leader>sp", function() dap.step_out() end)
+vim.keymap.set("n", "<F8>", function() dap.step_over() end)
 
 -- step in
-vim.keymap.set("n", "<leader>si", function() dap.step_into() end)
+vim.keymap.set("n", "<F9>", function() dap.step_into() end)
+
+-- step out
+vim.keymap.set("n", "<F10>", function() dap.step_out() end)
 
 -- toggle breakpoint
 vim.keymap.set("n", "<leader>b", function() dap.toggle_breakpoint() end)
