@@ -32,3 +32,7 @@ require("neotest").setup({
     }
 
 })
+
+vim.keymap.set("n", "<leader>ts", function() require("neotest").summary.toggle() end)
+vim.keymap.set("n", "<leader>ta", function() require("neotest").run.run({ suite = true }) end)
+
