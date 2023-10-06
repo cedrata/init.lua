@@ -38,4 +38,14 @@ return require('packer').startup(function(use)
         }
     }
     use('mfussenegger/nvim-dap')
+    use {
+        "nvim-neotest/neotest",
+        requires = {
+            "nvim-lua/plenary.nvim",
+            "nvim-treesitter/nvim-treesitter",
+            "antoinemadec/FixCursorHold.nvim",
+            -- adapters
+            "nvim-neotest/neotest-go",
+        }
+    }
 end)
