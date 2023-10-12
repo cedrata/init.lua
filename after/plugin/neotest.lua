@@ -12,7 +12,9 @@ vim.diagnostic.config({
 require("neotest").setup({
     -- your neotest config here
     adapters = {
-        require("neotest-go"),
+        require("neotest-go")({
+            args = {"-count=1"}
+        }),
     },
     icons = {
         child_indent = "│",
