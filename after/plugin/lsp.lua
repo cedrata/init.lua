@@ -18,7 +18,7 @@ local su = cmp.setup({
         { name = 'buffer' },
     },
     mapping = {
-        ['<C-y>'] = cmp.mapping.confirm({ select = true }),
+        ['<C-y>'] = cmp.mapping.confirm({ select = true, behavior = cmp.ConfirmBehavior.Replace }),
         ['<C-e>'] = cmp.mapping.abort(),
         ['<C-u>'] = cmp.mapping.scroll_docs(-4),
         ['<C-d>'] = cmp.mapping.scroll_docs(4),
