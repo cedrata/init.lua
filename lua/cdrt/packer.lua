@@ -3,7 +3,7 @@
 -- Only required if you have packer configured as `opt`
 vim.cmd [[packadd packer.nvim]]
 
-return require('packer').startup(function(use)
+return require('packer').startup(function(use, use_rocks)
     -- Packer can manage itself
     use 'wbthomason/packer.nvim'
     use {
@@ -11,13 +11,7 @@ return require('packer').startup(function(use)
         -- or                            , branch = '0.1.x',
         requires = { { 'nvim-lua/plenary.nvim' } }
     }
-    use({
-        'navarasu/onedark.nvim',
-        as = "one-dark",
-        config = function()
-            vim.cmd('colorscheme onedark')
-        end
-    })
+    use { "ellisonleao/gruvbox.nvim" }
     use('nvim-treesitter/nvim-treesitter', { run = ':TSUpdate' })
     use('theprimeagen/harpoon')
     use('mbbill/undotree')
@@ -52,9 +46,16 @@ return require('packer').startup(function(use)
         "andythigpen/nvim-coverage",
         requires = "nvim-lua/plenary.nvim",
         -- Optional: needed for PHP when using the cobertura parser
-        rocks = { 'lua-xmlreader' },
+        -- rocks = { 'lua-xmlreader' },
         config = function()
             require("coverage").setup()
         end,
     })
+    use {
+        'nvim-lualine/lualine.nvim',
+        requires = ({ 
+            'nvim-tree/nvim-web-devicons', 
+            opt = true 
+        })
+    }
 end)
