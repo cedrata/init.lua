@@ -3,7 +3,7 @@
 -- Only required if you have packer configured as `opt`
 vim.cmd [[packadd packer.nvim]]
 
-return require('packer').startup(function(use, use_rocks)
+return require('packer').startup(function(use)
     -- Packer can manage itself
     use 'wbthomason/packer.nvim'
     use {
@@ -31,7 +31,10 @@ return require('packer').startup(function(use, use_rocks)
             { 'L3MON4D3/LuaSnip' },     -- Required
         }
     }
-    use('mfussenegger/nvim-dap')
+    use {
+        'mfussenegger/nvim-dap',
+        "jay-babu/mason-nvim-dap.nvim"
+    }
     use {
         "nvim-neotest/neotest",
         requires = {

@@ -40,9 +40,9 @@ vim.keymap.set("n", "<leader>sb", function() dap.continue({ new = true }) end)
 -- end debug session
 vim.keymap.set("n", "<leader>se", function() dap.close() end)
 vim.keymap.set("n", "<F5>", function() dap.continue() end)
-vim.keymap.set("n", "<F8>", function() dap.step_over() end)
-vim.keymap.set("n", "<F9>", function() dap.step_into() end)
-vim.keymap.set("n", "<F10>", function() dap.step_out() end)
+vim.keymap.set("n", "<F6>", function() dap.step_over() end)
+vim.keymap.set("n", "<F7>", function() dap.step_into() end)
+vim.keymap.set("n", "<F8>", function() dap.step_out() end)
 vim.keymap.set("n", "<leader>b", function() dap.toggle_breakpoint() end)
 vim.keymap.set("n", "<leader>cb", function() dap.clear_breakpoints() end)
 

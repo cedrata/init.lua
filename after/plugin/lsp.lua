@@ -81,3 +81,6 @@ require('mason-lspconfig').setup({
         lsp.default_setup,
     },
 })
+require('mason-nvim-dap').setup({
+    ensure_installed = {'delve'}
+})
