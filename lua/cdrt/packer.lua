@@ -39,6 +39,7 @@ return require('packer').startup(function(use)
         'mfussenegger/nvim-dap',
         "jay-babu/mason-nvim-dap.nvim"
     }
+    use 'mfussenegger/nvim-dap-python'
     use {
         "nvim-neotest/neotest",
         requires = {

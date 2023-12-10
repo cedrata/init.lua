@@ -22,8 +22,19 @@ dap.adapters.go = {
     },
 }
 
+require('dap-python').setup('~/.virtualenvs/debugpy/bin/python')
+
+dap.configurations.python = {
+    {
+        type = 'python',
+        name = 'Debug current file default',
+        request = 'launch',
+        program = '${file}',
+    }
+}
+
 vim.fn.sign_define('DapBreakpoint', { text = "🪅", texthl = "", linehl = "", numhl = "" })
-vim.fn.sign_define('DapStopped', { text = "👀", texthl = "", linehl = "", numhl = "" })
+vim.fn.sign_define('DapStopped', { text = "👀", texthl = "", linehl = "DiffText", numhl = "" })
 
 -- open inspect a variable
 vim.keymap.set({ 'n', 'v' }, '<Leader>dh', function() require('dap.ui.widgets').hover() end)
