@@ -32,6 +32,10 @@ return require('packer').startup(function(use)
         }
     }
     use {
+        "/jose-elias-alvarez/null-ls.nvim",
+        "jay-babu/mason-null-ls.nvim"
+    }
+    use {
         'mfussenegger/nvim-dap',
         "jay-babu/mason-nvim-dap.nvim"
     }

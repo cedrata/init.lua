@@ -81,6 +81,30 @@ require('mason-lspconfig').setup({
         lsp.default_setup,
     },
 })
+
 require('mason-nvim-dap').setup({
     ensure_installed = {'delve'}
+})
+
+lspconfig = require("lspconfig")
+lspconfig.pylsp.setup({
+    pylsp = {
+        black = {enabled = true},
+    }
+})
+
+require('mason-null-ls').setup({
+    ensure_installed = { "black" }
+})
+
+local null_ls = require("null-ls")
+
+null_ls.setup({
+  sources = {
+    null_ls.builtins.formatting.black.with({
+    condition = function(utils)
+      return utils.root_has_file('pyproject.toml') -- change file extension if you use something else
+    end,
+  }),
+  },
 })
