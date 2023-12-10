@@ -102,9 +102,14 @@ local null_ls = require("null-ls")
 null_ls.setup({
   sources = {
     null_ls.builtins.formatting.black.with({
-    condition = function(utils)
-      return utils.root_has_file('pyproject.toml') -- change file extension if you use something else
-    end,
-  }),
+      condition = function(utils)
+        return utils.root_has_file('pyproject.toml') -- change file extension if you use something else
+      end,
+    }),
+    null_ls.builtins.diagnostics.pylint.with({
+      condition = function(utils)
+        return utils.root_has_file({'pylintrc', 'pyproject.toml'})
+      end,
+    })
   },
 })
