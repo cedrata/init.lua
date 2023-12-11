@@ -48,6 +48,7 @@ return require('packer').startup(function(use)
             "antoinemadec/FixCursorHold.nvim",
             -- adapters
             "nvim-neotest/neotest-go",
+            "nvim-neotest/neotest-python"
         }
     }
     use({
