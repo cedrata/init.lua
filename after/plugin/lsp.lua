@@ -94,10 +94,26 @@ lspconfig.pylsp.setup({
 })
 
 require('mason-null-ls').setup({
-    ensure_installed = { "black" }
+    ensure_installed = { "black", "pylint" }
 })
 
 local null_ls = require("null-ls")
+
+-- Function to check if .pylintrc exists in the current directory
+local function has_local_pylintrc()
+  local current_dir = vim.fn.expand('%:p:h')
+  local pylintrc_path = current_dir .. '/.pylintrc'
+  return vim.fn.filereadable(pylintrc_path) == 1
+end
+
+-- Determine the configuration dynamically
+local function get_pylint_config()
+  if has_local_pylintrc() then
+    return { '--rcfile', vim.fn.expand('%:p:h') .. '/pylintrc' }
+  else
+    return {}
+  end
+end
 
 null_ls.setup({
   sources = {
@@ -106,10 +122,8 @@ null_ls.setup({
         return utils.root_has_file('pyproject.toml') -- change file extension if you use something else
       end,
     }),
-    null_ls.builtins.diagnostics.pylint.with({
-      condition = function(utils)
-        return utils.root_has_file({'pylintrc', 'pyproject.toml'})
-      end,
-    })
+    null_ls.builtins.diagnostics.pylint.with {
+      extra_args = get_pylint_config(),
+    },
   },
 })
