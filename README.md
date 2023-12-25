@@ -18,6 +18,8 @@ python -m venv debugpy
 ~/.virtualenvs/debugpy python -m pip install debugpy
 ```
 
+- [nextest](https://nexte.st) if you are on mac simply install `brew install cargo-nextest`
+
 
 # Common issues and solutions
 - tresitter returns errors somewhere, currently happened in: fugitive commit console

@@ -38,7 +38,8 @@ require("neotest").setup({
           -- !!EXPERIMENTAL!! Enable shelling out to `pytest` to discover test
           -- instances for files containing a parametrize mark (default: false)
           -- pytest_discover_instances = true,
-        })
+        }),
+        require("neotest-rust")
     },
     icons = {
         child_indent = "│",
