@@ -22,6 +22,17 @@ dap.adapters.go = {
     },
 }
 
+dap.adapters.rust = {
+    type = "server",
+    port = "${port}",
+    executable = {
+        command = vim.fn.stdpath("data") .. '/mason/bin/dlv',
+        args = { "dap", "-l", "127.0.0.1:${port}" },
+    },
+}
+
+
+
 print(dap.configurations.go.program)
 
 require('dap-python').setup('~/.virtualenvs/debugpy/bin/python')

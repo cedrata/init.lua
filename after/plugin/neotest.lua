@@ -39,7 +39,9 @@ require("neotest").setup({
           -- instances for files containing a parametrize mark (default: false)
           -- pytest_discover_instances = true,
         }),
-        require("neotest-rust")
+        require("neotest-rust") {
+          args = { "--no-capture" },
+        }
     },
     icons = {
         child_indent = "│",

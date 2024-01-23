@@ -75,7 +75,8 @@ require('mason-lspconfig').setup({
         'rust_analyzer',
         'gopls',
         'eslint',
-        'pylsp'
+        'pylsp',
+        'golangci_lint_ls'
     },
     handlers = {
         lsp.default_setup,
@@ -94,7 +95,7 @@ lspconfig.pylsp.setup({
 })
 
 require('mason-null-ls').setup({
-    ensure_installed = { "black", "pylint" }
+    ensure_installed = { "black", "pylint", "golangci-lint", "cfn-lint"}
 })
 
 local null_ls = require("null-ls")
@@ -114,3 +115,23 @@ null_ls.setup({
     },
   },
 })
+
+
+-- golang lint
+local lspconfig = require 'lspconfig'
+local configs = require 'lspconfig/configs'
+
+if not configs.golangcilsp then
+ 	configs.golangcilsp = {
+		default_config = {
+			cmd = {'golangci-lint-langserver'},
+			root_dir = lspconfig.util.root_pattern('.git', 'go.mod'),
+			init_options = {
+					command = { "golangci-lint", "run", "--enable-all", "--disable", "lll", "--out-format", "json", "--issues-exit-code=1" };
+			}
+		};
+	}
+end
+lspconfig.golangci_lint_ls.setup {
+	filetypes = {'go','gomod'}
+}
