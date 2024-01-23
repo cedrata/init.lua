@@ -8,7 +8,7 @@ Some packages are required before the configuration phase of neovim:
 - [pyenv](https://github.com/pyenv/pyenv) 
 - [pipenv](https://github.com/pypa/pipenv)
 - npm (I like to do install some node version with [nvm](https://github.com/nvm-sh/nvm))
-- golangci-lint `brew install golangci-lint`
+- golangci-lint `brew install golangci-lint` (a configuration file may be required as ~/.golangci-lint, check documentation)
 
 After the packages installation it is required to do some more preliminary operations
 - Create a new virtualenv where to install `debugpy` enabling python debug.
