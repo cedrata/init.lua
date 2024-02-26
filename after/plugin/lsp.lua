@@ -77,12 +77,16 @@ require('mason-lspconfig').setup({
         'eslint',
         'pylsp',
         'golangci_lint_ls',
-        'templ'
+        'templ',
+        'html',
+        'htmx',
+        'tailwindcss'
     },
     handlers = {
         lsp.default_setup,
     },
 })
+
 
 vim.filetype.add({ extension = { templ = "templ" } })
 
@@ -95,6 +99,18 @@ lspconfig.pylsp.setup({
     pylsp = {
         black = {enabled = true},
     }
+})
+
+lspconfig.html.setup({
+    on_attach = on_attach,
+    capabilities = capabilities,
+    filetypes = { "html", "templ" },
+})
+
+lspconfig.htmx.setup({
+    on_attach = on_attach,
+    capabilities = capabilities,
+    filetypes = { "html", "templ" },
 })
 
 require('mason-null-ls').setup({
