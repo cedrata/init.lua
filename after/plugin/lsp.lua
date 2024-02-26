@@ -76,12 +76,15 @@ require('mason-lspconfig').setup({
         'gopls',
         'eslint',
         'pylsp',
-        'golangci_lint_ls'
+        'golangci_lint_ls',
+        'templ'
     },
     handlers = {
         lsp.default_setup,
     },
 })
+
+vim.filetype.add({ extension = { templ = "templ" } })
 
 require('mason-nvim-dap').setup({
     ensure_installed = {'delve'}
