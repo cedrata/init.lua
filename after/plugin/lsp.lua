@@ -80,7 +80,8 @@ require('mason-lspconfig').setup({
         'templ',
         'html',
         'htmx',
-        'tailwindcss'
+        'tailwindcss',
+        'lua_ls'
     },
     handlers = {
         lsp.default_setup,
@@ -91,13 +92,23 @@ require('mason-lspconfig').setup({
 vim.filetype.add({ extension = { templ = "templ" } })
 
 require('mason-nvim-dap').setup({
-    ensure_installed = {'delve'}
+    ensure_installed = { 'delve' }
 })
 
-lspconfig = require("lspconfig")
+require('mason-null-ls').setup({
+    ensure_installed = {
+        "black",
+        "flake8",
+        "isort",
+        "golangci-lint",
+        "cfn-lint"
+    }
+})
+
+local lspconfig = require("lspconfig")
 lspconfig.pylsp.setup({
     pylsp = {
-        black = {enabled = true},
+        black = { enabled = true },
     }
 })
 
@@ -113,44 +124,59 @@ lspconfig.htmx.setup({
     filetypes = { "html", "templ" },
 })
 
-require('mason-null-ls').setup({
-    ensure_installed = { "black", "pylint", "golangci-lint", "cfn-lint"}
-})
 
 local null_ls = require("null-ls")
 
 null_ls.setup({
-  sources = {
-    null_ls.builtins.formatting.black.with({
-      condition = function(utils)
-        return utils.root_has_file('pyproject.toml') -- change file extension if you use something else
-      end,
-    }),
-    null_ls.builtins.diagnostics.pylint.with {
-      condition = function(utils)
-        return utils.root_has_file({'pylintrc', '.pylintrc'})
-      end,
-      -- extra_args = -- some function to generate the required config
+    sources = {
+        null_ls.builtins.formatting.isort.with({
+            extra_args = {
+                "--multi-line_output", "3",
+                "--line-length ", "80",
+                "--include-trailing-comma", "true"
+            }
+        }),
+        null_ls.builtins.formatting.black.with({
+            extra_args = {
+                -- "--config", "pyproject.toml"
+                "--preview",
+                "--enable-unstable-feature", "string_processing",
+                "--line-length", "80"
+            },
+            -- condition = function(utils)
+            --     print(utils.root_has_file({ ".stylua.toml", "stylua.toml" }))
+            --     return utils.root_has_file('pyproject.toml')
+            -- end,
+        }),
+        null_ls.builtins.diagnostics.flake8,
     },
-  },
 })
 
 
 -- golang lint
-local lspconfig = require 'lspconfig'
 local configs = require 'lspconfig/configs'
 
 if not configs.golangcilsp then
- 	configs.golangcilsp = {
-		default_config = {
-			cmd = {'golangci-lint-langserver'},
-			root_dir = lspconfig.util.root_pattern('.git', 'go.mod'),
-			init_options = {
-					command = { "golangci-lint", "run", "--enable-all", "--disable", "lll", "--out-format", "json", "--issues-exit-code=1" };
-			}
-		};
-	}
+    configs.golangcilsp = {
+        default_config = {
+            cmd = { 'golangci-lint-langserver' },
+            root_dir = lspconfig.util.root_pattern('.git', 'go.mod'),
+            init_options = {
+                command = {
+                    "golangci-lint",
+                    "run",
+                    "--enable-all",
+                    "--disable",
+                    "lll",
+                    "--out-format",
+                    "json",
+                    "--issues-exit-code=1"
+                },
+            }
+        },
+    }
 end
+
 lspconfig.golangci_lint_ls.setup {
-	filetypes = {'go','gomod'}
+    filetypes = { 'go', 'gomod' }
 }
