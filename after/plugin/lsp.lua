@@ -141,20 +141,7 @@ local null_ls = require("null-ls")
 null_ls.setup({
     sources = {
         null_ls.builtins.formatting.isort,
-        null_ls.builtins.formatting.black.with({
-            extra_args = function()
-                local has_pyproject_toml = root_has_file("pyproject.toml")
-                if has_pyproject_toml then
-                    return { "--config", "pyproject.toml" }
-                else
-                    return {
-                        "--preview",
-                        "--enable-unstable-feature", "string_processing",
-                        "--line-length", "80"
-                    }
-                end
-            end,
-        }),
+        null_ls.builtins.formatting.black,
         null_ls.builtins.diagnostics.flake8,
     },
 })
