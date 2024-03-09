@@ -1,3 +1,10 @@
+-- @param filename string: filename in the root of the dir.
+-- @return boolean: true if the file exists in the project root.
+local function root_has_file(filename)
+    local filepath = vim.fn.expand('%:p:h') .. '/' .. filename
+    return vim.fn.filereadable(filepath) == 1
+end
+
 local lsp = require('lsp-zero')
 local cmp = require('cmp')
 
@@ -89,7 +96,11 @@ require('mason-lspconfig').setup({
 })
 
 
-vim.filetype.add({ extension = { templ = "templ" } })
+vim.filetype.add({
+    extension = {
+        templ = "templ"
+    }
+})
 
 require('mason-nvim-dap').setup({
     ensure_installed = { 'delve' }
@@ -109,6 +120,7 @@ local lspconfig = require("lspconfig")
 lspconfig.pylsp.setup({
     pylsp = {
         black = { enabled = true },
+        isort = { enabled = true },
     }
 })
 
@@ -124,7 +136,6 @@ lspconfig.htmx.setup({
     filetypes = { "html", "templ" },
 })
 
-
 local null_ls = require("null-ls")
 
 null_ls.setup({
@@ -133,20 +144,22 @@ null_ls.setup({
             extra_args = {
                 "--multi-line_output", "3",
                 "--line-length ", "80",
-                "--include-trailing-comma", "true"
+                "--include-trailing-comma", "true",
             }
         }),
         null_ls.builtins.formatting.black.with({
-            extra_args = {
-                -- "--config", "pyproject.toml"
-                "--preview",
-                "--enable-unstable-feature", "string_processing",
-                "--line-length", "80"
-            },
-            -- condition = function(utils)
-            --     print(utils.root_has_file({ ".stylua.toml", "stylua.toml" }))
-            --     return utils.root_has_file('pyproject.toml')
-            -- end,
+            extra_args = function()
+                local has_pyproject_toml = root_has_file("pyproject.toml")
+                if has_pyproject_toml then
+                    return { "--config", "pyproject.toml" }
+                else
+                    return {
+                        "--preview",
+                        "--enable-unstable-feature", "string_processing",
+                        "--line-length", "80"
+                    }
+                end
+            end,
         }),
         null_ls.builtins.diagnostics.flake8,
     },
