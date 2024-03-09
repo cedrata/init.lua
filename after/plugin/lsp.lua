@@ -140,13 +140,7 @@ local null_ls = require("null-ls")
 
 null_ls.setup({
     sources = {
-        null_ls.builtins.formatting.isort.with({
-            extra_args = {
-                "--multi-line_output", "3",
-                "--line-length ", "80",
-                "--include-trailing-comma", "true",
-            }
-        }),
+        null_ls.builtins.formatting.isort,
         null_ls.builtins.formatting.black.with({
             extra_args = function()
                 local has_pyproject_toml = root_has_file("pyproject.toml")
