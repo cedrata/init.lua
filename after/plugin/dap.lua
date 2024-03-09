@@ -33,8 +33,6 @@ dap.adapters.rust = {
 
 
 
-print(dap.configurations.go.program)
-
 require('dap-python').setup('~/.virtualenvs/debugpy/bin/python')
 
 dap.configurations.python = {
