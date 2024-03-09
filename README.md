@@ -25,3 +25,6 @@ python -m venv debugpy
 # Common issues and solutions
 - tresitter returns errors somewhere, currently happened in: fugitive commit console
 solution: in vim type `: TSUpdate`
+
+# Required improvements
+replace `none-ls`, follow [this guide](https://andrewcourter.substack.com/p/configure-linting-formatting-and)
