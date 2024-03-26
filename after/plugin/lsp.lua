@@ -1,10 +1,3 @@
--- @param filename string: filename in the root of the dir.
--- @return boolean: true if the file exists in the project root.
-local function root_has_file(filename)
-    local filepath = vim.fn.expand('%:p:h') .. '/' .. filename
-    return vim.fn.filereadable(filepath) == 1
-end
-
 local lsp = require('lsp-zero')
 local cmp = require('cmp')
 
@@ -88,7 +81,8 @@ require('mason-lspconfig').setup({
         'html',
         'htmx',
         'tailwindcss',
-        'lua_ls'
+        'lua_ls',
+        'ruff_lsp'
     },
     handlers = {
         lsp.default_setup,
@@ -108,8 +102,6 @@ require('mason-nvim-dap').setup({
 
 require('mason-null-ls').setup({
     ensure_installed = {
-        "black",
-        "flake8",
         "isort",
         "golangci-lint",
         "cfn-lint"
@@ -119,10 +111,30 @@ require('mason-null-ls').setup({
 local lspconfig = require("lspconfig")
 lspconfig.pylsp.setup({
     pylsp = {
-        black = { enabled = true },
+        pyflakes = { enabled = false },
+        pylint = { enabled = false },
+        pycodestyle = { enabled = false },
+        black = { enabled = false },
         isort = { enabled = true },
     }
 })
+
+local ruff_on_attach = function(client, _)
+    if client.name == 'ruff_lsp' then
+        -- Disable hover in favor of Pyright
+        client.server_capabilities.hoverProvider = false
+    end
+end
+
+lspconfig.ruff_lsp.setup {
+    on_attach = ruff_on_attach,
+    init_options = {
+        settings = {
+            -- Any extra CLI arguments for `ruff` go here.
+            args = {},
+        }
+    }
+}
 
 lspconfig.html.setup({
     on_attach = on_attach,
@@ -141,8 +153,6 @@ local null_ls = require("null-ls")
 null_ls.setup({
     sources = {
         null_ls.builtins.formatting.isort,
-        null_ls.builtins.formatting.black,
-        null_ls.builtins.diagnostics.flake8,
     },
 })
 
