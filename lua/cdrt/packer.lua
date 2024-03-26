@@ -33,7 +33,9 @@ return require('packer').startup(function(use)
     }
     use {
         "nvimtools/none-ls.nvim",
+        "jay-babu/mason-null-ls.nvim",
     }
+    use { "nvim-neotest/nvim-nio" }
     use {
         'mfussenegger/nvim-dap',
         "jay-babu/mason-nvim-dap.nvim"
