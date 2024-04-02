@@ -75,7 +75,8 @@ require('mason-lspconfig').setup({
         'rust_analyzer',
         'gopls',
         'eslint',
-        'pylsp',
+        -- 'pylsp',
+        'pyright',
         'golangci_lint_ls',
         'templ',
         'html',
@@ -109,15 +110,15 @@ require('mason-null-ls').setup({
 })
 
 local lspconfig = require("lspconfig")
-lspconfig.pylsp.setup({
-    pylsp = {
-        pyflakes = { enabled = false },
-        pylint = { enabled = false },
-        pycodestyle = { enabled = false },
-        black = { enabled = false },
-        isort = { enabled = true },
-    }
-})
+-- lspconfig.pylsp.setup({
+--     pylsp = {
+--         pyflakes = { enabled = false },
+--         pylint = { enabled = false },
+--         pycodestyle = { enabled = false },
+--         black = { enabled = false },
+--         isort = { enabled = true },
+--     }
+-- })
 
 local ruff_on_attach = function(client, _)
     if client.name == 'ruff_lsp' then
@@ -148,6 +149,15 @@ lspconfig.htmx.setup({
     filetypes = { "html", "templ" },
 })
 
+lspconfig.pyright.setup({
+    on_attach = on_attach,
+    settings = {
+        pyright = {
+            disableOrganizeImports = true
+        },
+    }
+})
+
 local null_ls = require("null-ls")
 
 null_ls.setup({
@@ -155,7 +165,6 @@ null_ls.setup({
         null_ls.builtins.formatting.isort,
     },
 })
-
 
 -- golang lint
 local configs = require 'lspconfig/configs'
