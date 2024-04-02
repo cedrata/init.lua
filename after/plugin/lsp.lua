@@ -76,8 +76,8 @@ require('mason-lspconfig').setup({
         'gopls',
         'eslint',
         -- 'pylsp',
-        -- 'pyright',
-        'jedi_language_server',
+        'pyright',
+        -- 'jedi_language_server',
         'golangci_lint_ls',
         'templ',
         'html',
@@ -150,28 +150,28 @@ lspconfig.htmx.setup({
     filetypes = { "html", "templ" },
 })
 
--- lspconfig.pyright.setup({
---     on_attach = on_attach,
---     settings = {
---         pyright = {
---             disableOrganizeImports = true,
---             diagnosticMode = "off"
---         },
---     }
--- })
-
--- enable only the lsp and disable diagnostics
--- this is done by ruff_lsp
-lspconfig.jedi_language_server.setup({
-    capabilities = capabilities,
+lspconfig.pyright.setup({
     on_attach = on_attach,
-    handlers = handlers,
-    init_options = {
-        completion = {
-            disableSnippets = true,
+    settings = {
+        pyright = {
+            disableOrganizeImports = true,
+            diagnosticMode = "off"
         },
     }
 })
+
+-- enable only the lsp and disable diagnostics
+-- this is done by ruff_lsp
+-- lspconfig.jedi_language_server.setup({
+--     capabilities = capabilities,
+--     on_attach = on_attach,
+--     handlers = handlers,
+--     init_options = {
+--         completion = {
+--             disableSnippets = true,
+--         },
+--     }
+-- })
 
 local null_ls = require("null-ls")
 
