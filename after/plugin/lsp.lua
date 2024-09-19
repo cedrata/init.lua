@@ -106,7 +106,8 @@ require('mason-null-ls').setup({
     ensure_installed = {
         "isort",
         "golangci-lint",
-        "cfn-lint"
+        -- "cfn-lint",
+        "blade-formatter"
     }
 })
 
@@ -178,6 +179,7 @@ local null_ls = require("null-ls")
 null_ls.setup({
     sources = {
         null_ls.builtins.formatting.isort,
+        null_ls.builtins.formatting.blade_formatter,
     },
 })
 

@@ -22,10 +22,10 @@ python -m venv debugpy
 
 - [nextest](https://nexte.st) if you are on mac simply install `brew install cargo-nextest`
 
-
 # Common issues and solutions
 - tresitter returns errors somewhere, currently happened in: fugitive commit console
 solution: in vim type `: TSUpdate`
 
-# Required improvements
-replace `none-ls`, follow [this guide](https://andrewcourter.substack.com/p/configure-linting-formatting-and)
+# Required improvements/to monitor
+- [Treesitter blade](https://medium.com/@jogarcia/laravel-blade-on-neovim-ee530ff5d20d) support (php/laravel), it works but keep an eye on it. Currently no autocompletion available :/
+- maybe a `queries/blade` and `after/queries` can be made to 
