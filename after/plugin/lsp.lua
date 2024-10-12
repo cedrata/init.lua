@@ -40,7 +40,7 @@ local custom_format = function()
 end
 
 lsp.on_attach(function(client, bufnr)
-    lsp.default_keymaps({ buffer = bufnr, exclude = {'<F3>'} })
+    lsp.default_keymaps({ buffer = bufnr, exclude = { '<F3>' } })
     vim.keymap.set("n", "<leader>ff", custom_format, opts)
 end)
 
