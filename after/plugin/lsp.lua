@@ -1,83 +1,72 @@
-local lsp = require('lsp-zero')
+local lsp = require("lsp-zero")
+
+lsp.preset("recommended")
+
 local cmp = require('cmp')
+local cmp_select = { behavior = cmp.SelectBehavior.Select }
+local cmp_mappings = lsp.defaults.cmp_mappings({
+    ['<C-p>'] = cmp.mapping.select_prev_item(cmp_select),
+    ['<C-n>'] = cmp.mapping.select_next_item(cmp_select),
+    ['<C-y>'] = cmp.mapping.confirm({ select = true }),
+    ["<C-Space>"] = cmp.mapping.complete(),
+})
 
+cmp_mappings['<Tab>'] = nil
+cmp_mappings['<S-Tab>'] = nil
 
--- lsp.setup_servers({"gopls", "lua_ls"})
+lsp.setup_nvim_cmp({
+    mapping = cmp_mappings
+})
+
+-- custom formatting to allow kids with special needs e.g. templ file
+-- to be formatted properly each time without any conflicts in the buffer.
+local custom_format = function()
+    if vim.bo.filetype == "templ" then
+        local bufnr = vim.api.nvim_get_current_buf()
+        local filename = vim.api.nvim_buf_get_name(bufnr)
+        local cmd = "templ fmt " .. vim.fn.shellescape(filename)
+
+        vim.fn.jobstart(cmd, {
+            on_exit = function()
+                -- Reload the buffer only if it's still the current buffer
+                if vim.api.nvim_get_current_buf() == bufnr then
+                    vim.cmd('e!')
+                end
+            end,
+        })
+    else
+        vim.lsp.buf.format()
+    end
+end
 
 lsp.on_attach(function(client, bufnr)
-    lsp.default_keymaps({ buffer = bufnr })
+    lsp.default_keymaps({ buffer = bufnr, exclude = {'<F3>'} })
+    vim.keymap.set("n", "<leader>ff", custom_format, opts)
 end)
 
--- lsp.omni
+-- lsp.configure('templ', {
+--     lsp.configure('html', {
+--         on_attach = function(client, bufnr)
+--             -- Only disable formatting for .templ files
+--             local filetype = vim.api.nvim_buf_get_option(bufnr, 'filetype')
+--             if filetype == 'templ' and client.name == 'html' then
+--                 client.server_capabilities.documentFormattingProvider = false
+--             end
+--         end,
+--     })
+-- })
 
 lsp.setup()
-
-local su = cmp.setup({
-    sources = {
-        { name = 'nvim_lsp' },
-        { name = 'buffer' },
-    },
-    mapping = {
-        ['<C-y>'] = cmp.mapping.confirm({ select = true, behavior = cmp.ConfirmBehavior.Replace }),
-        ['<C-e>'] = cmp.mapping.abort(),
-        ['<C-u>'] = cmp.mapping.scroll_docs(-4),
-        ['<C-d>'] = cmp.mapping.scroll_docs(4),
-        ['<Up>'] = cmp.mapping.select_prev_item(cmp_select_opts),
-        ['<Down>'] = cmp.mapping.select_next_item(cmp_select_opts),
-        ['<C-p>'] = cmp.mapping(function()
-            if cmp.visible() then
-                cmp.select_prev_item(cmp_select_opts)
-            else
-                cmp.complete()
-            end
-        end),
-        ['<C-n>'] = cmp.mapping(function()
-            if cmp.visible() then
-                cmp.select_next_item(cmp_select_opts)
-            else
-                cmp.complete()
-            end
-        end),
-    },
-    snippet = {
-        expand = function(args)
-            require('luasnip').lsp_expand(args.body)
-        end,
-    },
-    window = {
-        documentation = {
-            max_height = 15,
-            max_width = 60,
-        }
-    },
-    formatting = {
-        fields = { 'abbr', 'menu', 'kind' },
-        format = function(entry, item)
-            local short_name = {
-                nvim_lsp = 'LSP',
-                nvim_lua = 'nvim'
-            }
-
-            local menu_name = short_name[entry.source.name] or entry.source.name
-
-            item.menu = string.format('[%s]', menu_name)
-            return item
-        end,
-    },
-})
 
 require('mason').setup({})
 require('mason-lspconfig').setup({
     -- Replace the language servers listed here
     -- with the ones you want to install
     ensure_installed = {
-        -- 'tsserver',
         'rust_analyzer',
         'gopls',
         'eslint',
-        -- 'pylsp',
         'pyright',
-        -- 'jedi_language_server',
         'golangci_lint_ls',
         'templ',
         'html',
@@ -106,22 +95,11 @@ require('mason-null-ls').setup({
     ensure_installed = {
         "isort",
         "golangci-lint",
-        -- "cfn-lint",
         "blade-formatter"
     }
 })
 
 local lspconfig = require("lspconfig")
--- lspconfig.pylsp.setup({
---     pylsp = {
---         pyflakes = { enabled = false },
---         pylint = { enabled = false },
---         pycodestyle = { enabled = false },
---         black = { enabled = false },
---         isort = { enabled = true },
---     }
--- })
-
 local ruff_on_attach = function(client, _)
     if client.name == 'ruff_lsp' then
         -- Disable hover in favor of Pyright
@@ -161,19 +139,6 @@ lspconfig.pyright.setup({
     }
 })
 
--- enable only the lsp and disable diagnostics
--- this is done by ruff_lsp
--- lspconfig.jedi_language_server.setup({
---     capabilities = capabilities,
---     on_attach = on_attach,
---     handlers = handlers,
---     init_options = {
---         completion = {
---             disableSnippets = true,
---         },
---     }
--- })
-
 local null_ls = require("null-ls")
 
 null_ls.setup({
@@ -210,3 +175,7 @@ end
 lspconfig.golangci_lint_ls.setup {
     filetypes = { 'go', 'gomod' }
 }
+
+vim.diagnostic.config({
+    virtual_text = true
+})
